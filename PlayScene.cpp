@@ -1,5 +1,10 @@
 #include "PlayScene.h"
 #include "Engine\\Model.h"
+#include "Player.h"
+#include "Bullet.h"
+#include "Enemy.h"
+#include "Engine/SceneManager.h"
+#include "Engine/Camera.h"
 
 PlayScene::PlayScene(GameObject* parent)
 	:GameObject(parent, "PlayScene"),hModel_(-1)
@@ -8,38 +13,25 @@ PlayScene::PlayScene(GameObject* parent)
 
 void PlayScene::Initialize()
 {
-	hModel_ = Model::Load("Oden.fbx");
-	assert(hModel_ >= 0);
+	Instantiate<Enemy>(this);
+	Instantiate<Player>(this);//Playerのインスタンス＝プレイヤーオブジェクトを作る
+	Camera::SetPosition(XMFLOAT3(0.0f, 5.0f, -13.0f));
+	Camera::SetTarget(XMFLOAT3(0.0f, 0.0f, 10.0f));
 }
 
 void PlayScene::Update()
 {
+	if (FindObject("Enemy") == nullptr)
+	{
+		SceneManager* pSceneManager = (SceneManager*)(this->GetParent());
+		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+	}
 }
 
 void PlayScene::Draw()
 {
-	//static Transform ot;//おでん用のトランスフォーム
-	ot_.position_.x += speed_ * dir_;
-	if (ot_.position_.x > 5.0f)
-	{
-
-		ot_.position_.x = 5.0f;
-		dir_ = -1;
-	} 
-	else if (ot_.position_.x < 5.0f)
-	{
-		ot_.position_.x = -5.0f;
-		dir_ = -1;
-	}
-
-	ot_.scale_ = { 1.0f, 1.0f, 2.0f };
-	ot_.rotate_.y += 0.1f; //回転させる
-
-	Model::SetTransform(hModel_, ot_);
-	Model::Draw(hModel_);
 }
 
 void PlayScene::Release()
 {
 }
-//

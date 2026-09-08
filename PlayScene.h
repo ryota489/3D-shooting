@@ -22,9 +22,6 @@ public:
 private:
 	int hModel_;//モデルのハンドル
 	Transform ot_; //おでん用のトランスフォーム
-	float speed_ = 0.1f;
-	int dir_ = 1;
-
 };
 
 
